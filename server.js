@@ -1,3 +1,4 @@
+import ws from "ws";
 import { createBareServer } from "@tomphttp/bare-server-node";
 import express from "express";
 import { createServer } from "node:http";
@@ -22,7 +23,9 @@ dotenv.config({ path: `.env.${process.env.NODE_ENV || "production"}` });
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const { SUPABASE_URL, SUPABASE_KEY, SUPABASE_SERVICE_ROLE_KEY } = process.env;
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
+  realtime: { transport: ws }
+});
 const bare = createBareServer("/bare/");
 const app = express();
 const publicPath = "public";
